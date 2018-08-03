@@ -1,0 +1,28 @@
+#For detailed options and examples, see:
+#https://github.com/indigo-dc/udocker/blob/master/doc/user_manual.md
+#
+#The following commmands will take you through this tutorial
+#
+#Install Udocker
+./make_udocker.sh
+
+#Make local image of r-base (https://hub.docker.com/_/r-base/)
+./udocker pull r-base:latest
+
+#Create a container from the image
+./udocker create --name=myR r-base:latest
+
+#Open the "R" command line from the image and install the "lme4" package
+#"lme4" is a package that creates linear mixed effects models.
+#The '-v' option binds an external directory to an internal directory
+#The '-w' option specifies the working directory in the container
+#The '-u' option specifies the user ("docker" in this case)
+./udocker run -v "$PWD":/home/docker -w /home/docker -u docker myR R
+    #At the "R" prompt:
+    >install.packages("lme4")
+
+#Now run the script "lme_example.R" to plot some data and create a model
+./udocker run -v "$PWD":/home/docker -w /home/docker -u docker myR Rscript lme_example.R
+
+#View the plot of the data if you have X11-forwarding enabled
+gs Rplots.pdf
