@@ -1,93 +1,50 @@
-Create a github a account if you don't already have one. Go to:
+#Create a github a account if you don't already have one. Go to:
+#https://github.com/join
+#{Remember your username and password!}
 
-https://github.com/join
-
-{Remember your username and password!}
-
-----
-
-Create a directory for our singularity container:
-
-mkdir rmacc_container
-
------
-
-Go to that directory
-
-cd rmacc_container
-
------
-
-Let's create a recipe file  from an existing template
-
-git clone XXXX
+#Use a text editor to explore and customize the recipe file ‘Singularity’:
 
 nano Singularity
 
-make the following edits
+	#Can you determine the purpose of each section?
+	#Can you determine what this container does?  
+	#Are there any files copied to the container?
+	#Now change the ‘Maintainer’ to your name
+	#To exit and save type [ctrl-x], then “y”, then [enter].
 
------
-Now create an input file in your directory
+ #Now we are ready to build a container on Singularity Hub using this recipe. Recall that we do this by creating a github repository containing the ‘Singularity’ recipe file.  For the sake of time we’ve created a script to facilitate this step. Type:
 
-echo "test input file" >testfile.txt
+./make_git_repo.sh <your-github-username>
 
------
+#You will be prompted for your github password 2 times while the script is running; enter it each time.  User your browser to confirm your repository was created:
 
-Okay, now we are ready to build the container on singularity hub. The steps to do that are:
+https://github.com/<your-github-username>/build_container_on_shub
 
-XXXX
+#Now navigate to Singularity Hub in your browser:
 
-----
+https://www.singularity-hub.org/
 
-We've automated the github upload process for you by making a script.
-All you will need are your github username and password
+…and do the following:
+1. Go to the "login" link in the upper right corner and login with your github credentials
+2. Choose "GITHUB", not "GITHUB (WITH PRIVATE)"
+3. Go to "My container collections”
+4. Go to "Add a Collection”
+4. Choose "<your-github-username>/build_container_on_shub" and click on "SUBMIT”
+6. This will take you another page while your container builds.  You can click "refresh" to check it's status.  It may take several minutes. 
+7. If your container builds successfully, you will see a green ‘Complete’ button.  If not, let us know and we’ll help: you can quickly fix and re-commit the recipe to github, which will initiate another build on Singularity Hub.
 
-wget XXXX
-chmod +x make_git_repo.sh
-./make_git_repo.sh <your_github_username>
+#Now navigate to Singularity Hub in your browser:
 
------
+singularity pull --name mytranslator.img shub://<your-github-username>/build_container_on_shub
 
-Okay, now you should have a github repository called "rmacc_container" at:
+#Run your container with the ‘inside’ version of the python script:
 
-https://github.com/<your_user_name>/rmacc_container/
+singularity run mytranslator.img 
 
-..for example, mine is at:
+#…and run your container with the ‘outside’ version of the python script:
 
-https://github.com/monaghaa/rmacc_container/
+singularity exec mytranslator.img python ./text_translate.py
 
-Check to make sure it is there.
+#(hint: you can change the language in ./text_translate.py to confirm that the outside script is running)
 
------
-
-Now that you've confirmed it is there, we are ready to build the container on Singularity hub.
-
-Go to https://www.singularity-hub.org/
-
-Go to the "login" link in the upper right corner and login with your github credentials
-(choose "GITHUB", not "GITHUB (WITH PRIVATE)")
-
-Go to "My container collections"
-
-Go to "Add a Collection"
-
-Choose "<your_github_username>/rmacc_container" and click on "SUBMIT"
-
-This will take you another page while your container builds.  You can click "refresh" to check it's status.  It may take 5-10 min. Take a break.
-
-----
-
-Note: If your container builds successfully, you will see a green "Complete" button.  The container is now ready to use.
-
-Now let's go back to your linux command prompt on Summit and pull and run the container:
-
-singularity pull --name myfirstcontainer.img shub://<your_github_username>/rmacc_container
-
-This will pull the container from Singularity Hub and name it "myfirstcontainer.img"
-
-Now run it:
-
-singularity run myfirstcontainer.img
-
-[Note: If the container doesn't build successfully, look at the error messages, revise the "Singularity" file, run ./make_git_repo.sh again, and the rebuild it on Singularity hub.]
 

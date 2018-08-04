@@ -2,7 +2,7 @@ Bootstrap:docker
 From:ubuntu:latest
 
 %labels
-MAINTAINER Andy M
+MAINTAINER Andy Monaghan
 
 %environment
 CODE_DIR=/opt
